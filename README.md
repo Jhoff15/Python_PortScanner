@@ -11,7 +11,6 @@ und die Programmlaufzeit vermindert sich weiter.
 ## Branches
 + main -> Main Branch, Abgabe für Labor
 + basic -> Beschreibung und Anpassung (für Best Practices) des vorgegebenen Basiscodes
-+ sync -> Lösung für eine sequentielle Bearbeitung (connect_ex() nicht verwendet)
 
 ## Weiterentwicklung
 Möchte man einen fortgeschritteneren PortScanner bauen, so sollte man sich zwei Tools genauer Ansehen. 
