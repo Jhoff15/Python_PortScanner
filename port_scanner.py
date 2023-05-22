@@ -53,11 +53,13 @@ def port_checker(dst_host=str, testport=int, verbose=False) -> tuple[bool, int]:
     # um zweite If zu vermeiden wird port_open mit False deklariert und nur bei einem offenen Port überschrieben
     port_open = False
 
-# init eines Sockets
+    # init eines Sockets
     # Mit Socket können zum Beispiel Server-Client kommunikationen realisiert werden
-    # Socket kann z.B. mit connect eine TCP-Anfrage an einen Server schicken
+    # Socket kann z.B. mit connect eine TCP/UDP-Anfrage an einen Server schicken
     # Bei Servern wird die Funktion socket.listen() aufgerufen, der Socket hört dann einen
     # bestimmten Port ab und wartet auf einkommende Anfragen.
+    # Jedoch macht UDP keinen Sinn weil es keine Antwort sendet um zu versuchen eine Verbingund einzurichten
+    # -> es gibt keine wirklichen offenen UDP Ports
     # https://realpython.com/python-sockets/
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # Nach jedem connect oder generellen call wird die timeout Zeit abgewartet, bevor eine 
