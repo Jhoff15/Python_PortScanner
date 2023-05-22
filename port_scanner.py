@@ -12,37 +12,10 @@ def find_all_async(dst_host=str, start_port=int, end_port=int, verbose=False) ->
     ## dem Host möglich ist.
     ##
 
-    # init eines Sockets
-    # Mit Socket können zum Beispiel Server-Client kommunikationen realisiert werden
-    # Socket kann z.B. mit connect eine TCP-Anfrage an einen Server schicken
-    # Bei Servern wird die Funktion socket.listen() aufgerufen, der Socket hört dann einen
-    # bestimmten Port ab und wartet auf einkommende Anfragen.
-    # https://realpython.com/python-sockets/
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # Nach jedem connect oder generellen call wird die timeout Zeit abgewartet, bevor eine 
-    # Exception ausgelöst wird.
-    sock.settimeout(0.5)
-    #
-    #
-    #
-    #
-    #
-    #
-    ## Komplett Sinnlos so
-    ## connect_ex geht, aber besser umschreiben + erklärung
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-    #
-
     try:
         # sock.connect() versucht eine Verbindung mit der angegebenen IP/Port herzustellen
-        sock.connect_ex((dst_host, 80))
+        hostinfo = socket.gethostbyaddr("127.0.0.2")
+        print(f"Hostname: {hostinfo[0]}, Aliaslist: {hostinfo[1]}, Ipaddrlist: {hostinfo[2]}")
         # wird keine Exception ausgelöst geht es hier weiter
         # close() schließt Verbindung und beendet Socket
     #Exception wenn Host nicht erreichbar ist.
@@ -53,8 +26,19 @@ def find_all_async(dst_host=str, start_port=int, end_port=int, verbose=False) ->
     ## Ende HILFSBLOCK
     ##
 
+    # init eines Sockets
+    # Mit Socket können zum Beispiel Server-Client kommunikationen realisiert werden
+    # Socket kann z.B. mit connect eine TCP-Anfrage an einen Server schicken
+    # Bei Servern wird die Funktion socket.listen() aufgerufen, der Socket hört dann einen
+    # bestimmten Port ab und wartet auf einkommende Anfragen.
+    # https://realpython.com/python-sockets/
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Nach jedem connect oder generellen call wird die timeout Zeit abgewartet, bevor eine 
+    # Exception ausgelöst wird.
+    sock.settimeout(0.5)
+
     # Erzeugung der Asynchronen Prozesse https://docs.python.org/3/library/concurrent.futures.html
-    with futures.ThreadPoolExecutor(max_workers=1000) as executor:
+    with futures.ThreadPoolExecutor(max_workers=2000) as executor:
         # erzeugt eine Liste mit den Typen list[Future[tuple[bool, int]]] , also wird der Wert noch erwartet, da die Werte
         # vom Typ Future sind.
         results = [
