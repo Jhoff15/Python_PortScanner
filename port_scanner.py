@@ -26,25 +26,12 @@ def find_all_async(dst_host=str, start_port=int, end_port=int, verbose=False) ->
     ## Ende HILFSBLOCK
     ##
 
-    # init eines Sockets
-    # Mit Socket können zum Beispiel Server-Client kommunikationen realisiert werden
-    # Socket kann z.B. mit connect eine TCP/UDP-Anfrage an einen Server schicken
-    # Bei Servern wird die Funktion socket.listen() aufgerufen, der Socket hört dann einen
-    # bestimmten Port ab und wartet auf einkommende Anfragen.
-    # Jedoch macht UDP keinen Sinn weil es keine Antwort sendet um zu versuchen eine Verbingund einzurichten
-    # -> es gibt keine wirklichen offenen UDP Ports
-    # https://realpython.com/python-sockets/
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # Nach jedem connect oder generellen call wird die timeout Zeit abgewartet, bevor eine 
-    # Exception ausgelöst wird.
-    sock.settimeout(0.5)
-
     # Erzeugung der Asynchronen Prozesse https://docs.python.org/3/library/concurrent.futures.html
     with futures.ThreadPoolExecutor(max_workers=2000) as executor:
         # erzeugt eine Liste mit den Typen list[Future[tuple[bool, int]]] , also wird der Wert noch erwartet, da die Werte
         # vom Typ Future sind.
         results = [
-            executor.submit(port_checker, dst_host=dst_host, testport=i, verbose=verbose, sock=sock) for i in range(start_port, end_port+1)
+            executor.submit(port_checker, dst_host=dst_host, testport=i, verbose=verbose) for i in range(start_port, end_port+1)
         ]
         # Sage dem executor das gewartet werden soll, bis ein Ergebnis zurückkommt
         executor.shutdown(wait=True, cancel_futures=False)
@@ -59,12 +46,25 @@ def find_all_async(dst_host=str, start_port=int, end_port=int, verbose=False) ->
     return open_ports
 
 # Checkt ob ein TCP-Port auf einem Host-System erreichbar/offen ist.
-def port_checker(dst_host=str, testport=int, verbose=False, sock=socket) -> tuple[bool, int]:
+def port_checker(dst_host=str, testport=int, verbose=False) -> tuple[bool, int]:
     # Dieser Print und in line 88 sind zur Verdeutlichung der Asynchronität
     print(f'Port Checker on {testport} started...')
 
     # um zweite If zu vermeiden wird port_open mit False deklariert und nur bei einem offenen Port überschrieben
     port_open = False
+
+    # init eines Sockets
+    # Mit Socket können zum Beispiel Server-Client kommunikationen realisiert werden
+    # Socket kann z.B. mit connect eine TCP/UDP-Anfrage an einen Server schicken
+    # Bei Servern wird die Funktion socket.listen() aufgerufen, der Socket hört dann einen
+    # bestimmten Port ab und wartet auf einkommende Anfragen.
+    # Jedoch macht UDP keinen Sinn weil es keine Antwort sendet um zu versuchen eine Verbingund einzurichten
+    # -> es gibt keine wirklichen offenen UDP Ports
+    # https://realpython.com/python-sockets/
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Nach jedem connect oder generellen call wird die timeout Zeit abgewartet, bevor eine 
+    # Exception ausgelöst wird.
+    sock.settimeout(0.5)
 
     # connect_ex() agiert genauso wie connect() aus Zeile 27, es wird aber entweder 0 oder 111 zurückgegeben
     # 0: Erfolgreich -> Port offen
