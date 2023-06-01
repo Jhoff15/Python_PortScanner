@@ -22,7 +22,7 @@ def get_system32_services_dict() -> dict: ## {port: service}
             # Trenne zweite Spalte bei "/" auf
             split_port_protc = split_in_3[1].split(sep="/")
             # es wird getestet ob bereits ein Eintrag für den Port existiert
-            # siehe port_scanner.py line 69 oder 
+            # siehe port_scanner.py line 61 oder 
             # https://stackoverflow.com/questions/68193407/how-do-i-check-whether-an-open-port-is-tcp-or-udp
             if int(split_port_protc[0]) not in services_dict.keys():
                 # trage key, value par in Dictionary ein
