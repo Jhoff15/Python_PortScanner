@@ -4,6 +4,8 @@ from port_scanner import find_all_async
 from helper import get_system32_services_dict, get_inputs, create_file_name
 
 ##
+## Authors : Joshua Hoffmann, Ömer Ata, Marco Knell
+## Date : 05.06.23
 ## Ausgangspunkt des Programms, bewusst knapp gehalten -> best Practice für exe
 ##
 def main():
